@@ -11,6 +11,7 @@ All notable changes to CliWitness are documented here. The project follows
   behavior.
 - Parallel execution with stable declaration-order reporting.
 - Bounded stream retention with complete draining and truncation failures.
+- Portable CRLF/CR-to-LF normalization with an explicit opt-out.
 - Deterministic text, JSON, and JUnit XML reports.
 - JSON Schema, zero runtime dependencies, and cross-platform packaging.
 

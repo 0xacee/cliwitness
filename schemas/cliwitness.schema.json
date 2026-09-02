@@ -10,6 +10,7 @@
     "command": { "$ref": "#/$defs/strings" },
     "timeout": { "type": "number", "exclusiveMinimum": 0, "maximum": 300 },
     "max_output_bytes": { "type": "integer", "minimum": 1024, "maximum": 16777216 },
+    "normalize_newlines": { "type": "boolean", "default": true },
     "inherit_env": {
       "type": "array",
       "items": { "type": "string" },

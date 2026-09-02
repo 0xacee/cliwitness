@@ -3,7 +3,7 @@ import tempfile
 import textwrap
 import unittest
 
-from cliwitness.runner import run_spec
+from cliwitness.runner import normalize_text, run_spec
 from cliwitness.spec import load_spec
 
 
@@ -11,6 +11,10 @@ FIXTURE = Path(__file__).with_name("fixture_cli.py").resolve()
 
 
 class RunnerTests(unittest.TestCase):
+    def test_newline_normalization_makes_text_contracts_portable(self) -> None:
+        self.assertEqual(normalize_text("windows\r\nclassic\rnext\n", True), "windows\nclassic\nnext\n")
+        self.assertEqual(normalize_text("windows\r\n", False), "windows\r\n")
+
     def spec(self, cases: str, *, timeout: float = 2, max_output: int = 65536):
         directory = Path(tempfile.mkdtemp(prefix="cliwitness-run-"))
         target = directory / "suite.toml"

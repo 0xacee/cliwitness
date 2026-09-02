@@ -23,6 +23,7 @@ class SpecTests(unittest.TestCase):
         '''))
         self.assertEqual(spec.timeout, 5.0)
         self.assertEqual(spec.max_output_bytes, 65_536)
+        self.assertTrue(spec.normalize_newlines)
         self.assertEqual(spec.cases[0].expect.exit, 0)
 
     def test_rejects_duplicate_case_names(self) -> None:

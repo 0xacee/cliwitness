@@ -54,9 +54,16 @@ class _BoundedReader:
                 self.parts.append(retained)
                 self.kept += len(retained)
 
-    def capture(self) -> StreamCapture:
+    def capture(self, normalize_newlines: bool) -> StreamCapture:
         content = b"".join(self.parts).decode("utf-8", errors="replace")
+        content = normalize_text(content, normalize_newlines)
         return StreamCapture(content, self.total, self.total > self.limit)
+
+
+def normalize_text(value: str, enabled: bool) -> str:
+    if not enabled:
+        return value
+    return value.replace("\r\n", "\n").replace("\r", "\n")
 
 
 def _expand(values: tuple[str, ...]) -> list[str]:
@@ -146,8 +153,8 @@ def run_case(spec: Spec, case: Case) -> CaseResult:
         process.stdout.close()
         process.stderr.close()
     elapsed = round((time.monotonic() - started) * 1000)
-    stdout = stdout_reader.capture()
-    stderr = stderr_reader.capture()
+    stdout = stdout_reader.capture(spec.normalize_newlines)
+    stderr = stderr_reader.capture(spec.normalize_newlines)
     failures = list(_evaluate(case, process.returncode, timed_out, stdout.text, stderr.text))
     if stdout.truncated:
         failures.append(f"stdout exceeded max_output_bytes ({stdout.bytes} bytes)")

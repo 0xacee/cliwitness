@@ -44,6 +44,7 @@ version = 1
 command = ["{python}", "src/my_cli.py"]
 timeout = 5
 max_output_bytes = 65536
+normalize_newlines = true
 inherit_env = ["PATH"]
 
 [[cases]]
@@ -77,6 +78,11 @@ checkout location.
 
 Cases run sequentially by default. `--jobs N` runs them concurrently while
 preserving declaration order in every report.
+
+CRLF and lone CR are normalized to LF by default so text contracts remain
+portable across Windows, macOS, and Linux. Set `normalize_newlines = false`
+when platform-specific newline bytes are part of the interface under test;
+byte counts always describe the original captured stream.
 
 ## Isolation and safety
 

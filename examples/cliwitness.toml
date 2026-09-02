@@ -2,6 +2,7 @@ version = 1
 command = ["{python}", "demo_cli.py"]
 timeout = 3
 max_output_bytes = 65536
+normalize_newlines = true
 inherit_env = ["PATH"]
 
 [[cases]]

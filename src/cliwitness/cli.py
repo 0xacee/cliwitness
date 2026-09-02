@@ -16,6 +16,7 @@ TEMPLATE = '''version = 1
 command = ["{python}", "path/to/your_cli.py"]
 timeout = 5
 max_output_bytes = 65536
+normalize_newlines = true
 inherit_env = ["PATH"]
 
 [[cases]]

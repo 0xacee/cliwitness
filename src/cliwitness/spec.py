@@ -41,6 +41,7 @@ class Spec:
     command: tuple[str, ...]
     timeout: float
     max_output_bytes: int
+    normalize_newlines: bool
     inherit_env: tuple[str, ...]
     cases: tuple[Case, ...]
 
@@ -106,16 +107,19 @@ def load_spec(path: str | Path) -> Spec:
         raise ValueError(f"invalid TOML in {target}: {error}") from error
     if not isinstance(data, dict):
         raise ValueError("specification must be a TOML table")
-    _reject_unknown(data, {"version", "command", "timeout", "max_output_bytes", "inherit_env", "cases"}, "specification")
+    _reject_unknown(data, {"version", "command", "timeout", "max_output_bytes", "normalize_newlines", "inherit_env", "cases"}, "specification")
     if data.get("version") != 1:
         raise ValueError("specification version must be 1")
     command = _strings(data.get("command"), "command", nonempty=True)
     timeout = data.get("timeout", 5.0)
     max_output = data.get("max_output_bytes", 65_536)
+    normalize_newlines = data.get("normalize_newlines", True)
     if not isinstance(timeout, (int, float)) or isinstance(timeout, bool) or timeout <= 0 or timeout > 300:
         raise ValueError("timeout must be between 0 and 300 seconds")
     if not isinstance(max_output, int) or isinstance(max_output, bool) or not 1_024 <= max_output <= 16_777_216:
         raise ValueError("max_output_bytes must be between 1024 and 16777216")
+    if not isinstance(normalize_newlines, bool):
+        raise ValueError("normalize_newlines must be a boolean")
     inherit_env = _strings(data.get("inherit_env", ["PATH"]), "inherit_env")
     raw_cases = data.get("cases")
     if not isinstance(raw_cases, list) or not raw_cases:
@@ -148,4 +152,4 @@ def load_spec(path: str | Path) -> Spec:
             cwd=cwd,
             expect=_expectation(raw.get("expect", {}), f"{context}.expect"),
         ))
-    return Spec(target, command, float(timeout), max_output, inherit_env, tuple(cases))
+    return Spec(target, command, float(timeout), max_output, normalize_newlines, inherit_env, tuple(cases))
