@@ -1,0 +1,21 @@
+name: Bug report
+description: Report an incorrect contract result or process behavior
+title: "bug: "
+labels: [bug]
+body:
+  - type: textarea
+    attributes:
+      label: Minimal specification and fixture
+      description: Remove credentials and private output.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Expected result
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: CliWitness, Python, and OS versions
+    validations:
+      required: true

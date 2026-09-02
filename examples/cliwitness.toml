@@ -1,0 +1,22 @@
+version = 1
+command = ["{python}", "demo_cli.py"]
+timeout = 3
+max_output_bytes = 65536
+inherit_env = ["PATH"]
+
+[[cases]]
+name = "human greeting"
+args = ["Ada"]
+
+[cases.expect]
+exit = 0
+stdout_exact = "Hello, Ada!\n"
+stderr_exact = ""
+
+[[cases]]
+name = "machine greeting"
+args = ["Grace", "--json"]
+
+[cases.expect]
+exit = 0
+json_equals = { greeting = "Hello, Grace!" }
