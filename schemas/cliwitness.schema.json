@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/0xacee/cliwitness/main/schemas/cliwitness.schema.json",
+  "title": "CliWitness contract suite",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "command", "cases"],
+  "properties": {
+    "version": { "const": 1 },
+    "command": { "$ref": "#/$defs/strings" },
+    "timeout": { "type": "number", "exclusiveMinimum": 0, "maximum": 300 },
+    "max_output_bytes": { "type": "integer", "minimum": 1024, "maximum": 16777216 },
+    "inherit_env": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true
+    },
+    "cases": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/case" }
+    }
+  },
+  "$defs": {
+    "strings": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string" }
+    },
+    "case": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "args": { "type": "array", "items": { "type": "string" } },
+        "stdin": { "type": "string" },
+        "cwd": { "type": "string" },
+        "env": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        },
+        "expect": { "$ref": "#/$defs/expect" }
+      }
+    },
+    "expect": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "exit": { "type": "integer" },
+        "timed_out": { "type": "boolean" },
+        "stdout_exact": { "type": "string" },
+        "stderr_exact": { "type": "string" },
+        "stdout_contains": { "type": "array", "items": { "type": "string" } },
+        "stderr_contains": { "type": "array", "items": { "type": "string" } },
+        "stdout_excludes": { "type": "array", "items": { "type": "string" } },
+        "stderr_excludes": { "type": "array", "items": { "type": "string" } },
+        "stdout_matches": { "type": "array", "items": { "type": "string" } },
+        "stderr_matches": { "type": "array", "items": { "type": "string" } },
+        "json_equals": true
+      }
+    }
+  }
+}

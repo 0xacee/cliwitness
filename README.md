@@ -1,5 +1,9 @@
 # CliWitness
 
+[![CI](https://github.com/0xacee/cliwitness/actions/workflows/ci.yml/badge.svg)](https://github.com/0xacee/cliwitness/actions/workflows/ci.yml)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-3776ab.svg)](pyproject.toml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-7c3aed.svg)](LICENSE)
+
 **Executable contracts for the interface users actually touch.**
 
 CliWitness runs a command as an argument vector—never through a shell—and
@@ -34,6 +38,8 @@ cliwitness run --format junit > cli-results.xml
 ## Contract format
 
 ```toml
+#:schema https://raw.githubusercontent.com/0xacee/cliwitness/main/schemas/cliwitness.schema.json
+
 version = 1
 command = ["{python}", "src/my_cli.py"]
 timeout = 5
@@ -84,6 +90,9 @@ preserving declaration order in every report.
 
 Specs are executable test intent. Review them like code and never commit real
 secrets in `env`, arguments, stdin, or expected output.
+
+The optional `#:schema` directive enables completion and validation in editors
+that understand TOML schema comments.
 
 ## Reports and exit codes
 
